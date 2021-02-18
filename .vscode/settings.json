@@ -1,0 +1,7 @@
+{
+    "Lua.diagnostics.disable": [
+        "unused-local",
+        "redefined-local"
+    ],
+    "lua.targetVersion": "5.1"
+}
