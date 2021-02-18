@@ -127,7 +127,7 @@ function library:window(name)
     local HeaderText = Instance.new("TextLabel")
     HeaderText.Name = "HeaderText"
     HeaderText.Parent = Header
-    HeaderText.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    HeaderText.BackgroundColor3 = Color3.fromRGB(253, 251, 251)
     HeaderText.BackgroundTransparency = 1.000
     HeaderText.Position = UDim2.new(0, 0, -0.0020698905, 0)
     HeaderText.Size = UDim2.new(0, 206, 0, 33)
