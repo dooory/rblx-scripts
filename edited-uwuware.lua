@@ -1674,4 +1674,8 @@ inputService.InputChanged:connect(function(input)
 	end
 end)
 
+function library:Destroy()
+	self:Destroy()
+end	
+
 return library
