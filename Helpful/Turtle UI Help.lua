@@ -1,7 +1,7 @@
 [[--
 Load library:
 Code:
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/miroeramaa/TurtleLib/main/TurtleUiLib.lua"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dooory/rblx-scripts/main/edited-turtle-ui.lua"))()
 
 Add windows:
 Code:
