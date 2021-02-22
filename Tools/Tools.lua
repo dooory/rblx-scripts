@@ -1,4 +1,4 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dooory/rblx-scripts/main/edited-turtle-ui.lua"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dooory/rblx-scripts/main/Tools/edited-turtle-ui.lua"))()
 local window = library:window("Made by dory")
 
 window:button("Hydroxide", function()
