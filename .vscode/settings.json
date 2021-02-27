@@ -7,7 +7,8 @@
         "unknown-symbol",
         "undefined-rbx-member",
         "incorrect-call-arguments",
-        "redundant-parameter"
+        "redundant-parameter",
+        "undefined-global"
     ],
     "lua.targetVersion": "5.1",
     "Lua.diagnostics.ignore": [

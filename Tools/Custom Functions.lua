@@ -1,5 +1,6 @@
-local functions = {}
+local cf = {}
 
-function test()
+
+function cf:test()
     print("Test")
 end
