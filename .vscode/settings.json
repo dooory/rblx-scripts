@@ -1,7 +1,30 @@
 {
     "Lua.diagnostics.disable": [
         "unused-local",
-        "redefined-local"
+        "redefined-local",
+        "unused-function",
+        "missing-module-return",
+        "unknown-symbol",
+        "undefined-rbx-member",
+        "incorrect-call-arguments",
+        "redundant-parameter"
     ],
-    "lua.targetVersion": "5.1"
+    "lua.targetVersion": "5.1",
+    "Lua.diagnostics.ignore": [
+        "HttpGet",
+        "HttpGetAsync",
+        "Text",
+        "ReleaseFocus",
+        "Position",
+        "CanvasSize",
+        "ClipsDescendants"
+    ],
+    "Lua.diagnostics.globals": [
+        "fireclickdetector",
+        "setclipboard",
+        "syn",
+        "get_hidden_gui",
+        "notify",
+        "PROTOSMASHER_LOADED"
+    ]
 }

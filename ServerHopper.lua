@@ -6,6 +6,4 @@ local x = {}
 	end
 	if #x > 0 then
 		game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, x[math.random(1, #x)])
-	else
-		return notify("Serverhop","Couldn't find a server.")
 	end
