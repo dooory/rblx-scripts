@@ -1,5 +1,5 @@
 local functions = {}
 
-local function test()
+function test()
     print("Test")
 end
