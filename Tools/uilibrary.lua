@@ -1649,12 +1649,6 @@ function library:Close()
 	end
 end
 
-function library:Destroy()
-	for _,windows in next, self.windows do
-		window:Destroy()
-	end
-end
-
 inputService.InputBegan:connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
 		if library.activePopup then
