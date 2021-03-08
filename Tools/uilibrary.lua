@@ -1609,6 +1609,14 @@ local UnlockMouse
 function library:Init()
 	
 	self.base = self.base or self:Create("ScreenGui")
+	if syn and syn.protect_gui then
+		syn.protect_gui(self.base)
+	elseif get_hidden_gui then
+		get_hidden_gui(self.base)
+	else
+		game:GetService"Players".LocalPlayer:Kick("Error: protect_gui function not found")
+		return
+	end
 	self.base.Parent = game:GetService"CoreGui"
 	
 	self.cursor = self.cursor or self:Create("Frame", {
@@ -1639,6 +1647,10 @@ function library:Close()
 			window.main.Visible = self.open
 		end
 	end
+end
+
+function library:Destroy()
+	self.Destroy()
 end
 
 inputService.InputBegan:connect(function(input)
