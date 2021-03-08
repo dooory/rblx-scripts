@@ -1650,7 +1650,9 @@ function library:Close()
 end
 
 function library:Destroy()
-	self.Destroy()
+	for _,windows in next, self.windows do
+		window:Destroy()
+	end
 end
 
 inputService.InputBegan:connect(function(input)
