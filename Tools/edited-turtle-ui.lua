@@ -87,7 +87,7 @@ function library:destroy()
         keybindConnection:Disconnect()
     end
 end
-function library:Keybind(key)
+function library:keybind(key)
     if keybindConnection then keybindConnection:Disconnect() end
 
     keybindConnection = uis.InputBegan:Connect(function(input, gp)
