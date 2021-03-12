@@ -1,0 +1,173 @@
+--Globals
+Enabled = false
+Target = "Thug"
+Weapon = "Combat"
+Distance = 6
+WSToggle = false
+Walkspeed = 16
+JPToggle = false
+Jumppower = 50
+
+--Variables
+local plr = game.Players.LocalPlayer
+local char = plr.Character
+local run = game:GetService("RunService")
+local enemielist = {}
+local toolslist = {}
+
+--Get All Enemys
+for i,v in pairs(workspace:GetChildren()) do
+    if not table.find(enemielist,v.Name) and v:FindFirstChild("Humanoid") and (v.Humanoid:FindFirstChild("NPC_Enemy")) then
+        table.insert(enemielist,v.Name)
+    end
+end
+
+--Get Weapons
+for i,v in pairs(plr.Backpack:GetChildren()) do
+    if not table.find(toolslist,v.Name) then
+        table.insert(toolslist,v.Name)
+    end
+end
+
+--Notify function
+
+function notify(title,text,duration)
+    game:GetService("StarterGui"):SetCore("SendNotification",{
+        Title = title,
+        Text = text,
+        Duration = duration
+    })
+end
+
+
+--Unequips Held Tools
+char.Humanoid:UnequipTools()
+
+--UI Library
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dooory/rblx-scripts/main/Tools/edited-turtle-ui.lua"))()
+local main = library:window("Auto-Farm")
+
+main:toggle("Enabled",false,function(a)Enabled=a;end)
+local targetdropdown = main:dropdown("Target",enemielist,function(a)Target=a;end)
+local weapondropdown = main:dropdown("Weapon",toolslist,function(a)Weapon=a;end)
+main:slider("Distance",-9,9,6,function(a)Distance=a;end)
+
+main:button("Destroy UI",function()library:destroy();end)
+
+--Local Player
+local lp = library:window("Local Player")
+local spawns = workspace.SpawnPoints
+local tplist = {
+    "Starter Island", --1
+    "Evil Thug Island", --2
+    "Slime Island", --3
+    "Snow Island", --4
+    "Snake Island", --5
+    "Desert Island", --6
+    "Noob Island", --7
+    "Duck Island", --8
+    "Kyo Temple", --9
+    "Sword Master Arena", --10
+    "Sans Island", --11
+    "Lighting Sword Island", --12
+    "Middle Island", --13
+    "Sky Island", --14
+}
+local islandtp = lp:dropdown("Location",tplist,function(v)
+    if v == tplist[1] then
+        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Starter Island"].Position)
+    elseif v == tplist[2] then
+        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Second Island"].Position) 
+    elseif v == tplist[3] then
+        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Fourth Island"].Position) 
+    elseif v == tplist[4] then
+        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Third Island"].Position) 
+    elseif v == tplist[5] then
+        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Five Island"].Position)
+    elseif v == tplist[6] then
+        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Seven Island"].Position) 
+    elseif v == tplist[7] then
+        char.HumanoidRootPart.CFrame = CFrame.new(-2779.02026, 24.0699158, 829.802124) 
+    elseif v == tplist[8] then
+        char.HumanoidRootPart.CFrame = CFrame.new(-2593.00562, 17.7490444, -165.444214)
+    elseif v == tplist[9] then
+        char.HumanoidRootPart.CFrame = CFrame.new(-2380.06616, 185.000015, 2334.91284)  
+    elseif v == tplist[10] then
+        char.HumanoidRootPart.CFrame = CFrame.new(-2054.56274, 17, 1332.3407)  
+    elseif v == tplist[11] then
+        char.HumanoidRootPart.CFrame = CFrame.new(807.376892, 13, 2451.57617)  
+    elseif v == tplist[12] then
+        char.HumanoidRootPart.CFrame = CFrame.new(15.3122225, 13.9999962, 573.928467)  
+    elseif v == tplist[13] then
+        char.HumanoidRootPart.CFrame = CFrame.new(-1066.9812, 16.9999943, -920.639221)  
+    elseif v == tplist[14] then
+        char.HumanoidRootPart.CFrame = CFrame.new(-1718.01709, 444.641815, -1234.63208)  
+    end
+end)
+local tplist = {}
+for _,v in pairs(workspace:GetChildren()) do
+    if not table.find(tplist,v.Name) and v:FindFirstChildOfClass("Humanoid") and v:FindFirstChild("Click") or v:FindFirstChild("Buy") and v.Name ~= "SpawnManager" then
+        table.insert(tplist,v.Name)
+    end
+end
+
+local npcdropdown = lp:dropdown('NPCs',tplist,function(v)
+    local v = workspace[v].HumanoidRootPart
+    local part = Instance.new("Part",workspace)
+    part.CFrame = v.CFrame * CFrame.new(0,-3,0)
+    part.Anchored = true
+    part.Transparency = 1
+    part.Size = Vector3.new(25,0.1,25)
+    char.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,3,-3)
+end)
+
+local lp = library:window("Local Player")
+lp:toggle("Loop Walk Speed",false,function(a)WSToggle=a;end)
+lp:slider("Walk speed",16,200,16,function(a)Walkspeed=a;end)
+lp:toggle("Loop Jump Power",false,function(a)JumpPower=a;end)
+lp:slider("Jump Power",50,500,16,function(a)JumpPower=a;end)
+
+--Functions
+
+function enemy()
+    for i,v in pairs(workspace:GetChildren(Target)) do
+        if v.Name == Target and v:IsA("Model") then
+            return v
+        end
+    end
+end
+
+--Noclip
+run.RenderStepped:Connect(function()
+    if Enabled then
+        char.Humanoid:ChangeState(11)
+    end
+end)
+
+--Script Functions
+while true do
+    local bindable = Instance.new("BindableEvent")
+    local v = enemy()
+    if Enabled then
+        repeat
+            spawn(function()
+                if plr.Backpack:FindFirstChild(Weapon) then
+                    char.Humanoid:EquipTool(plr.Backpack[Weapon])
+                    wait()
+                elseif char:FindFirstChild(Weapon) then
+                    char[Weapon]:Activate()
+                    wait()
+                end
+            end)
+            pcall(function()
+                char.HumanoidRootPart.CFrame = CFrame.new(v.HumanoidRootPart.Position) * CFrame.Angles(math.rad(Distance < 0 and 90 or -90),0,0) + Vector3.new(0,Distance,0)  
+            end)
+            wait()
+        until not Enabled or Target ~= v.Name or not v.Parent or not v:FindFirstChild("HumanoidRootPart") or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+    elseif WSToggle then
+        repeat  char.Humanoid.WalkSpeed = Walkspeed Wait() until not WSToggle
+    elseif JPToggle then
+        repeat char.Humanoid.JumpPower = Jumppower Wait() until not JPToggle
+    end
+    wait(.2)
+end
