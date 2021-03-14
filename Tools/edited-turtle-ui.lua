@@ -569,7 +569,7 @@ function library:window(name)
 		DropdownFrame.Visible = false
             end)
         end
-        function dropFunctions:Remove(name)
+        function dropFunctions:remove(name)
             local foundIt
             for i, v in pairs(DropdownFrame:GetChildren()) do
                 if foundIt then
