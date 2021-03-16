@@ -1,0 +1,136 @@
+--edit the text at line 122
+local _game = game
+local _wait = wait
+local _tostring = tostring
+local _tick = tick
+
+local WaitForChild = _game.WaitForChild
+
+local _UDim2_fromOffset, _UDim2_fromScale, _Color3_fromRGB, _Instance_new, _string_format, _os_date
+do
+   local _UDim2, _Color3, _Instance, _string, _os, _math = UDim2, Color3, Instance, string, os, math
+
+   _UDim2_fromOffset = _UDim2.fromOffset
+   _UDim2_fromScale = _UDim2.fromScale
+   _Color3_fromRGB = _Color3.fromRGB
+   _Instance_new = _Instance.new
+   _string_format = _string.format
+   _os_date = _os.date
+   _math_floor = _math.floor
+end
+
+local Players, CoreGui, RobloxReplicatedStorage
+do
+   local GetService = _game.GetService
+
+   Players = GetService(_game, "Players")
+   CoreGui = GetService(_game, "CoreGui")
+   RobloxReplicatedStorage = GetService(_game, "RobloxReplicatedStorage")
+end
+
+do
+   local Destroy = _game.Destroy
+
+   local ACTION_FORMAT = {
+       ["TopRoundedRect"] = Destroy,
+       ["BottomRoundedRect"] = Destroy,
+       ["MenuIcon"] = Destroy,
+       ["ChatIcon"] = Destroy,
+       ["MoreMenu"] = Destroy,
+       ["LeaveGameButtonTextLabel"] = function(guiObject)
+           guiObject.Text = "RageQuit"
+       end,
+       ["PlayerScrollList"] = function(guiObject)
+           guiObject.Position = _UDim2_fromOffset(4, -82)
+       end,
+       ["HealthBar"] = function(guiObject)
+           guiObject.Position = _UDim2_fromOffset(-69, 3)
+           guiObject.Size = _UDim2_fromOffset(165, 6)
+       end
+   }
+
+   for _, guiObject in pairs(CoreGui:GetDescendants()) do
+       local objectAction = ACTION_FORMAT[_tostring(guiObject)]
+
+       if guiObject:IsA("GuiObject") and objectAction then
+           objectAction(guiObject)
+       end
+   end
+
+   local robloxGui = WaitForChild(CoreGui, "RobloxGui")
+   local performanceStats = WaitForChild(robloxGui, "PerformanceStats")
+
+   performanceStats:ClearAllChildren()
+end
+
+do
+   local screenGui = _Instance_new("ScreenGui")
+   screenGui.Parent = CoreGui
+   local watermarkFrame = _Instance_new("Frame")
+   watermarkFrame.BackgroundColor3 = _Color3_fromRGB(38, 21, 43)
+   watermarkFrame.BorderColor3 = _Color3_fromRGB(189, 93, 217)
+   watermarkFrame.Position = _UDim2_fromOffset(5, -30)
+   watermarkFrame.Parent = screenGui
+   local watermarkText = _Instance_new("TextLabel")
+   watermarkText.AnchorPoint = Vector2.new(0.5, 0.5)
+   watermarkText.Position = _UDim2_fromScale(0.5, 0.5)
+   watermarkText.TextColor3 = _Color3_fromRGB(226, 187, 237)
+   watermarkText.Font = Enum.Font.SourceSans
+   watermarkText.TextSize = 16
+   watermarkText.Parent = watermarkFrame
+
+   watermarkText:GetPropertyChangedSignal("TextBounds"):Connect(
+       function()
+           local textBounds = watermarkText.TextBounds
+           watermarkFrame.Size = _UDim2_fromOffset(textBounds.X + 8, textBounds.Y + 8)
+       end
+   )
+
+   local localPlayer = Players.LocalPlayer
+   local localName = _tostring(localPlayer)
+
+   local remoteFunction = WaitForChild(RobloxReplicatedStorage, "GetServerVersion")
+
+   local function updateText()
+       local formattedHour, formattedMinute, formattedSecond
+       do
+           local currentTime = _os_date("*t")
+           formattedHour = currentTime.hour
+           formattedMinute = currentTime.min
+           formattedSecond = currentTime.sec
+
+           if formattedHour < 10 then
+               formattedHour = "0" .. formattedHour
+           end
+           if formattedMinute < 10 then
+               formattedMinute = "0" .. formattedMinute
+           end
+           if formattedSecond < 10 then
+               formattedSecond = "0" .. formattedSecond
+           end
+       end
+
+       local responseStart = _tick()
+
+       local responseEnd
+       do
+           local ping = remoteFunction:InvokeServer()
+           responseEnd = -(responseStart - _tick()) * 1000
+       end
+
+       watermarkText.Text =
+           _string_format(
+           "monkeyhook | %sms | %s:%s:%s | %s",
+           _math_floor(responseEnd),
+           formattedHour,
+           formattedMinute,
+           formattedSecond,
+           localName
+       )
+   end
+
+   while true do
+       updateText()
+       _wait(1)
+   end
+end
