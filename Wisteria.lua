@@ -1,1 +1,0 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Vzurxy/Scripts/main/wisteria.lua", true))()
