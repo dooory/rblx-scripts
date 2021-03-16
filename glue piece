@@ -22,6 +22,12 @@ for i,v in pairs(workspace:GetChildren()) do
     end
 end
 
+for i,v in pairs(workspace["First Island Enemy"]:GetChildren()) do
+    if not table.find(enemielist,v.Name) and v:FindFirstChild("Humanoid") and (v.Humanoid:FindFirstChild("NPC_Enemy")) then
+        table.insert(enemielist,v.Name)
+    end
+end
+
 --Get Weapons
 for i,v in pairs(plr.Backpack:GetChildren()) do
     if not table.find(toolslist,v.Name) then
