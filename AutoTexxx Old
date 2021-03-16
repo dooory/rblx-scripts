@@ -1,1 +1,185 @@
 
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local ScreenGui = Instance.new("ScreenGui")
+local Gradient = Instance.new("Frame")
+local UIGradient = Instance.new("UIGradient")
+local UICorner = Instance.new("UICorner")
+local Goto = Instance.new("TextButton")
+local Shadow = Instance.new("Frame")
+local TextLabel = Instance.new("TextLabel")
+local Autofarm = Instance.new("TextButton")
+local Shadow_2 = Instance.new("Frame")
+local TextLabel_2 = Instance.new("TextLabel")
+local Daily = Instance.new("TextButton")
+local Shadow_3 = Instance.new("Frame")
+local TextLabel_3 = Instance.new("TextLabel")
+local TextLabel_4 = Instance.new("TextLabel")
+
+--Properties:
+
+ScreenGui.Parent = game.CoreGui
+
+Gradient.Name = "Gradient"
+Gradient.Parent = ScreenGui
+Gradient.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Gradient.BorderColor3 = Color3.fromRGB(27, 42, 53)
+Gradient.BorderSizePixel = 0
+Gradient.Position = UDim2.new(0.197580636, 0, 0, 0)
+Gradient.Size = UDim2.new(0, 387, 0, 136)
+Gradient.Draggable = true
+
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(102, 45, 113)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(197, 66, 110))}
+UIGradient.Parent = Gradient
+
+UICorner.CornerRadius = UDim.new(0, 4)
+UICorner.Parent = Gradient
+
+Goto.Name = "Goto"
+Goto.Parent = Gradient
+Goto.BackgroundColor3 = Color3.fromRGB(221, 221, 221)
+Goto.BorderSizePixel = 0
+Goto.Position = UDim2.new(0.0425014421, 0, 0.354716033, 0)
+Goto.Size = UDim2.new(0, 180, 0, 45)
+Goto.ZIndex = 2
+Goto.Font = Enum.Font.GothamSemibold
+Goto.Text = "A"
+Goto.TextColor3 = Color3.fromRGB(255, 255, 255)
+Goto.TextScaled = true
+Goto.TextSize = 14.000
+Goto.TextWrapped = true
+Goto.MouseButtonDown:connect(function()
+	local plr = game.Players.LocalPlayer
+	local char = plr.Character 
+	char.HumanoidRootPart.CFrame = CFrame.new(-331.09, -90.1198, -1998.72) --Sells in VIP
+end)
+
+Shadow.Name = "Shadow"
+Shadow.Parent = Goto
+Shadow.BackgroundColor3 = Color3.fromRGB(150, 150, 150)
+Shadow.BorderSizePixel = 0
+Shadow.Size = UDim2.new(1, 0, 1, 4)
+
+TextLabel.Parent = Goto
+TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(27, 42, 53)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.5, 0, 0.544444442, 0)
+TextLabel.Size = UDim2.new(1, -20, 1, -20)
+TextLabel.ZIndex = 2
+TextLabel.Font = Enum.Font.GothamSemibold
+TextLabel.Text = "Goto Diamond Haven"
+TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
+
+Autofarm.Name = "Autofarm"
+Autofarm.Parent = Gradient
+Autofarm.BackgroundColor3 = Color3.fromRGB(221, 221, 221)
+Autofarm.BorderSizePixel = 0
+Autofarm.Position = UDim2.new(0.292207778, 0, 0, 0)
+Autofarm.Size = UDim2.new(0, 180, 0, 45)
+Autofarm.ZIndex = 2
+Autofarm.Font = Enum.Font.GothamSemibold
+Autofarm.Text = ""
+Autofarm.TextColor3 = Color3.fromRGB(255, 255, 255)
+Autofarm.TextScaled = true
+Autofarm.TextSize = 14.000
+Autofarm.TextWrapped = true
+Autofarm.MouseButtonDown:connect(function()
+	local plr = game.Players.LocalPlayer
+	local char = plr.Character 
+
+	while wait() do
+		local args = {
+			[1] = "Phone"
+		}
+
+		game:GetService("ReplicatedStorage").Events.SendTexts:FireServer(unpack(args))
+
+		wait(1)
+		char.HumanoidRootPart.CFrame = CFrame.new(161.868, 100.686, -2446.95) --Sells in VIP
+		
+		end
+end)	
+	
+Shadow_2.Name = "Shadow"
+Shadow_2.Parent = Autofarm
+Shadow_2.BackgroundColor3 = Color3.fromRGB(150, 150, 150)
+Shadow_2.BorderSizePixel = 0
+Shadow_2.Size = UDim2.new(1, 0, 1, 4)
+
+TextLabel_2.Parent = Autofarm
+TextLabel_2.AnchorPoint = Vector2.new(0.5, 0.5)
+TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_2.BackgroundTransparency = 1.000
+TextLabel_2.BorderColor3 = Color3.fromRGB(27, 42, 53)
+TextLabel_2.BorderSizePixel = 0
+TextLabel_2.Position = UDim2.new(0.5, 0, 0.544444442, 0)
+TextLabel_2.Size = UDim2.new(1, -20, 1, -20)
+TextLabel_2.ZIndex = 2
+TextLabel_2.Font = Enum.Font.GothamSemibold
+TextLabel_2.Text = "Autofarm"
+TextLabel_2.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_2.TextScaled = true
+TextLabel_2.TextSize = 14.000
+TextLabel_2.TextWrapped = true
+
+Daily.Name = "Daily"
+Daily.Parent = Gradient
+Daily.BackgroundColor3 = Color3.fromRGB(221, 221, 221)
+Daily.BorderSizePixel = 0
+Daily.Position = UDim2.new(0.509631217, 0, 0.35649097, 0)
+Daily.Size = UDim2.new(0, 180, 0, 45)
+Daily.ZIndex = 2
+Daily.Font = Enum.Font.GothamSemibold
+Daily.Text = "Get Daily Rewards"
+Daily.TextColor3 = Color3.fromRGB(255, 255, 255)
+Daily.TextScaled = true
+Daily.TextSize = 14.000
+Daily.TextWrapped = true
+Daily.MouseButtonDown:connect(function()
+	local plr = game.Players.LocalPlayer
+	local char = plr.Character 
+	
+	char.HumanoidRootPart.CFrame = CFrame.new(-104.274, 100.686, -2450.93) --Sells in VIP
+
+end)
+
+Shadow_3.Name = "Shadow"
+Shadow_3.Parent = Daily
+Shadow_3.BackgroundColor3 = Color3.fromRGB(150, 150, 150)
+Shadow_3.BorderSizePixel = 0
+Shadow_3.Size = UDim2.new(1, 0, 1, 4)
+
+TextLabel_3.Parent = Daily
+TextLabel_3.AnchorPoint = Vector2.new(0.5, 0.5)
+TextLabel_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_3.BackgroundTransparency = 1.000
+TextLabel_3.BorderColor3 = Color3.fromRGB(27, 42, 53)
+TextLabel_3.BorderSizePixel = 0
+TextLabel_3.Position = UDim2.new(0.5, 0, 0.5, 0)
+TextLabel_3.Size = UDim2.new(1, -20, 1, -20)
+TextLabel_3.ZIndex = 2
+TextLabel_3.Font = Enum.Font.GothamSemibold
+TextLabel_3.Text = "Get Daily Rewards"
+TextLabel_3.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_3.TextScaled = true
+TextLabel_3.TextSize = 14.000
+TextLabel_3.TextWrapped = true
+
+TextLabel_4.Parent = Gradient
+TextLabel_4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_4.BackgroundTransparency = 1.000
+TextLabel_4.Position = UDim2.new(0.240310073, 0, 0.683823526, 0)
+TextLabel_4.Size = UDim2.new(0, 200, 0, 50)
+TextLabel_4.Font = Enum.Font.SciFi
+TextLabel_4.Text = "AutoTexxx"
+TextLabel_4.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_4.TextSize = 30.000
