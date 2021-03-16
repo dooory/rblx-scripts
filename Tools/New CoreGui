@@ -58,7 +58,7 @@ do
    end
 
    local robloxGui = WaitForChild(CoreGui, "RobloxGui")
-   local performanceStats = WaitForChild(robloxGui, "PerformanceStats")
+   local performanceStats = robloxGui.PerformanceStats
 
    performanceStats:ClearAllChildren()
 end
