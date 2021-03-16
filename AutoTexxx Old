@@ -1,3 +1,8 @@
+local a = game.workspace:GetChildren()
+a[72].Name = "viproom"
+
+local plr = game.Players.LocalPlayer
+local char = plr.Character
 
 -- Gui to Lua
 -- Version: 3.2
@@ -51,10 +56,8 @@ Goto.TextColor3 = Color3.fromRGB(255, 255, 255)
 Goto.TextScaled = true
 Goto.TextSize = 14.000
 Goto.TextWrapped = true
-Goto.MouseButtonDown:connect(function()
-	local plr = game.Players.LocalPlayer
-	local char = plr.Character 
-	char.HumanoidRootPart.CFrame = CFrame.new(-331.09, -90.1198, -1998.72) --Sells in VIP
+Goto.MouseButton1Down:connect(function()
+    char.HumanoidRootPart.CFrame = CFrame.new(-331.09, -90.1198, -1998.72) --Sells in VIP
 end)
 
 Shadow.Name = "Shadow"
@@ -92,23 +95,25 @@ Autofarm.TextColor3 = Color3.fromRGB(255, 255, 255)
 Autofarm.TextScaled = true
 Autofarm.TextSize = 14.000
 Autofarm.TextWrapped = true
-Autofarm.MouseButtonDown:connect(function()
-	local plr = game.Players.LocalPlayer
-	local char = plr.Character 
+Autofarm.MouseButton1Down:connect(function()
+    while wait() do
+        local args = {
+            [1] = "Phone"
+        }
 
-	while wait() do
-		local args = {
-			[1] = "Phone"
-		}
-
-		game:GetService("ReplicatedStorage").Events.SendTexts:FireServer(unpack(args))
-
-		wait(1)
-		char.HumanoidRootPart.CFrame = CFrame.new(161.868, 100.686, -2446.95) --Sells in VIP
-		
-		end
-end)	
-	
+        game:GetService("ReplicatedStorage").Events.SendTexts:FireServer(unpack(args))
+        spawn(function()
+            wait()
+            firetouchinterest(char.LeftFoot, game:GetService("Workspace").viproom.CellphoneTower.SellTexts.Union,0)
+            wait(0.5)
+            firetouchinterest(char.LeftFoot, game:GetService("Workspace").viproom.CellphoneTower.SellTexts.Union,1)
+            wait(0.5)
+            firetouchinterest(char.LeftFoot, game:GetService("Workspace").viproom.CellphoneTower.SellTexts.Union,0)
+            char.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace").viproom.CellphoneTower.SellTexts.Union.Position)
+        end)
+    end
+end)    
+    
 Shadow_2.Name = "Shadow"
 Shadow_2.Parent = Autofarm
 Shadow_2.BackgroundColor3 = Color3.fromRGB(150, 150, 150)
@@ -144,11 +149,11 @@ Daily.TextColor3 = Color3.fromRGB(255, 255, 255)
 Daily.TextScaled = true
 Daily.TextSize = 14.000
 Daily.TextWrapped = true
-Daily.MouseButtonDown:connect(function()
-	local plr = game.Players.LocalPlayer
-	local char = plr.Character 
-	
-	char.HumanoidRootPart.CFrame = CFrame.new(-104.274, 100.686, -2450.93) --Sells in VIP
+Daily.MouseButton1Down:connect(function()
+    local plr = game.Players.LocalPlayer
+    local char = plr.Character
+    
+    char.HumanoidRootPart.CFrame = CFrame.new(-104.274, 100.686, -2450.93) --Sells in VIP
 
 end)
 
