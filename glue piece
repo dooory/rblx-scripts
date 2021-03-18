@@ -134,6 +134,25 @@ lp:toggle("Loop Jump Power",false,function(a)JumpPower=a;end)
 lp:slider("Jump Power",50,500,16,function(a)JumpPower=a;end)
 
 --Functions
+function findHumanoid()
+    if char:FindFirstChild("Humanoid") ~= nil then
+        return true
+    else
+        return false
+    end
+end
+
+function equip()
+    wait()
+    if findHumanoid then
+        wait()
+        local tool = plr.Backpack:FindFirstChild(Weapon) or char:FindFirstChild(Weapon) and findHumanoid()
+        pcall(function()
+            tool.Parent = char
+            tool:Activate()
+        end)
+    end
+end
 
 function enemy()
     for i,v in pairs(workspace:GetChildren(Target)) do
@@ -152,24 +171,18 @@ end)
 
 --Script Functions
 while true do
-    local bindable = Instance.new("BindableEvent")
     local v = enemy()
-    if Enabled then
+    if Enabled and typeof(v) == "Instance" then
         repeat
-            spawn(function()
-                if plr.Backpack:FindFirstChild(Weapon) then
-                    char.Humanoid:EquipTool(plr.Backpack[Weapon])
-                    wait()
-                elseif char:FindFirstChild(Weapon) then
-                    char[Weapon]:Activate()
-                    wait()
-                end
-            end)
-            pcall(function()
-                char.HumanoidRootPart.CFrame = CFrame.new(v.HumanoidRootPart.Position) * CFrame.Angles(math.rad(Distance < 0 and 90 or -90),0,0) + Vector3.new(0,Distance,0)  
-            end)
-            wait()
-        until not Enabled or Target ~= v.Name or not v.Parent or not v:FindFirstChild("HumanoidRootPart") or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
+            if findHumanoid then
+                wait()
+                pcall(function()
+                    char.HumanoidRootPart.CFrame = CFrame.new(v.HumanoidRootPart.Position) * CFrame.Angles(math.rad(Distance < 0 and 90 or -90),0,0) + Vector3.new(0,Distance,0)  
+                end)
+                wait()
+                equip()
+            end
+        until not Enabled or not v.Parent or not v:FindFirstChild("HumanoidRootPart") or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
     elseif WSToggle then
         repeat  char.Humanoid.WalkSpeed = Walkspeed Wait() until not WSToggle
     elseif JPToggle then
