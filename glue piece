@@ -165,9 +165,6 @@ for _,v in pairs(workspace:GetChildren()) do
     elseif v:FindFirstChild("Meshes/Torus") and v:FindFirstChild("Handle") then
         v.Name = "Soru"
         table.insert(tplist,v.Name)
-    elseif v.Name == "Handle" and v:FindFirstChild("ClickDetector") then
-        v.Name = "Black Leg"
-        table.insert(tplist,v.Name)
     end
 end
 
