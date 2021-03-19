@@ -1,67 +1,108 @@
+--Have to change the names for equipping tool to work
+if game:GetService("ReplicatedStorage").RemoteEvent:FindFirstChild("Yoru") then
+    game:GetService("ReplicatedStorage").RemoteEvent:FindFirstChild("Yoru").Name = "Youru"
+end
+
+if game:GetService("ReplicatedStorage").RemoteEvent:FindFirstChild("TrueYoru") then
+    game:GetService("ReplicatedStorage").RemoteEvent:FindFirstChild("TrueYoru").Name = "True Youru"
+end
+
 --Globals
 Enabled = false
-Target = "Thug"
+Toolsequipped = false
+DFToggle = false
 Weapon = "Combat"
+Enemie = "Thug"
 Distance = 6
-WSToggle = false
-Walkspeed = 16
-JPToggle = false
-Jumppower = 50
+WalkSpeed = 16
+JumpPower = 50
+lastdf = tick()
+
 
 --Variables
 local plr = game.Players.LocalPlayer
-local char = plr.Character
+
 local run = game:GetService("RunService")
-local enemielist = {}
-local toolslist = {}
+local uis = game:GetService("UserInputService")
+local vim = game:GetService("VirtualInputManager")
 
---Get All Enemys
-for i,v in pairs(workspace:GetChildren()) do
-    if not table.find(enemielist,v.Name) and v:FindFirstChild("Humanoid") and (v.Humanoid:FindFirstChild("NPC_Enemy")) then
-        table.insert(enemielist,v.Name)
-    end
-end
+local tools = {"All"}
+local toolremotes = {"Youru","True Youru","Bisento"}
 
-for i,v in pairs(workspace["First Island Enemy"]:GetChildren()) do
-    if not table.find(enemielist,v.Name) and v:FindFirstChild("Humanoid") and (v.Humanoid:FindFirstChild("NPC_Enemy")) then
-        table.insert(enemielist,v.Name)
-    end
-end
+local Skills = {
+    E = true,
+    R = true,
+    T = true,
+    F = true
+}
 
---Get Weapons
+--List of mobs in the game
+local mobs = {"Thug","Evil Thug","Slime","Sneaky","Runny","Nooby","Unknown Boss [Fake Yoru]","Cutie Noob","Elite Noob","King Noob","Kyo","Sans","Cutie [Boss Raid]"}
+local npclist = {}
+
+
+
+--Get Tools in backpack
 for i,v in pairs(plr.Backpack:GetChildren()) do
-    if not table.find(toolslist,v.Name) then
-        table.insert(toolslist,v.Name)
+    if not string.find(v.Name,"Fruity") and not table.find(tools,v.Name) then
+        table.insert(tools,v.Name)
     end
 end
 
---Notify function
+--Get tools in character
+for i,v in pairs(plr.Character:GetChildren()) do
+    if not string.find(v.Name,"Fruity") and not table.find(tools,v.Name) and v:IsA("Tool") then
+        table.insert(tools,v.Name)
+    end
+end
 
-function notify(title,text,duration)
-    game:GetService("StarterGui"):SetCore("SendNotification",{
+--Get Mobs
+for i,v in pairs(workspace:GetChildren()) do
+    if v:FindFirstChild("Humanoid") and v:FindFirstChild("NPC_Enemy") and not table.find(mobs,v.Name) then
+        table.insert(mobs,v.Name)
+    end
+end
+
+
+--Functions
+
+--Notify Function
+function notify(title,text,duration,button1,button2,callback)
+    game.StarterGui:SetCore("SendNotification", {
         Title = title,
         Text = text,
-        Duration = duration
+        Duration = duration;
+        Button1 = button1 or nil;
+        Button2 = button2 or nil;
+        Callback = callback or nil;
     })
 end
 
+--Function to tp df to plr
+function tpDF(df)
+    if df:IsA("Tool") and df.Parent == workspace or df.Parent == workspace.DF then
+        plr.Character.Humanoid:EquipTool(df)
+        wait()
+    end
+end
 
---Unequips Held Tools
-char.Humanoid:UnequipTools()
-
---UI Library
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dooory/rblx-scripts/main/Tools/edited-turtle-ui.lua"))()
+--Library
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/dooory/rblx-scripts/main/Tools/edited-turtle-ui.lua",true))()
 local main = library:window("Auto-Farm")
+local localplr = library:window("Local Player")
+local other = library:window("Misc")
 
-main:toggle("Enabled",false,function(a)Enabled=a;end)
-local targetdropdown = main:dropdown("Target",enemielist,function(a)Target=a;end)
-local weapondropdown = main:dropdown("Weapon",toolslist,function(a)Weapon=a;end)
-main:slider("Distance",-9,9,6,function(a)Distance=a;end)
-
-main:button("Destroy UI",function()library:destroy();end)
+--Main
+main:toggle("Enabled",false,function(a)Enabled=a;print(a);end)
+main:dropdown("Target",mobs,function(a)Enemie=a;print(a);end)
+main:dropdown("Weapon",tools,function(a)Weapon=a;print(a);end)
+main:slider("Distance",-9,9,6,function(a)Distance=a;print(a);end)
+for i,v in pairs(Skills) do
+    main:toggle(i,true,function(a)v=a;print(i,v)end)
+end
 
 --Local Player
-local lp = library:window("Local Player")
+localplr:toggle("DF Tp",false,function(a)DFToggle=a;end)
 local spawns = workspace.SpawnPoints
 local tplist = {
     "Starter Island", --1
@@ -79,109 +120,217 @@ local tplist = {
     "Middle Island", --13
     "Sky Island", --14
 }
-local islandtp = lp:dropdown("Location",tplist,function(v)
+
+
+localplr:dropdown("Location",tplist,function(v)
     if v == tplist[1] then
-        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Starter Island"].Position)
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(spawns["Starter Island"].Position)
     elseif v == tplist[2] then
-        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Second Island"].Position) 
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(spawns["Second Island"].Position) 
     elseif v == tplist[3] then
-        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Fourth Island"].Position) 
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(spawns["Fourth Island"].Position) 
     elseif v == tplist[4] then
-        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Third Island"].Position) 
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(spawns["Third Island"].Position) 
     elseif v == tplist[5] then
-        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Five Island"].Position)
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(spawns["Five Island"].Position)
     elseif v == tplist[6] then
-        char.HumanoidRootPart.CFrame = CFrame.new(spawns["Seven Island"].Position) 
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(spawns["Seven Island"].Position) 
     elseif v == tplist[7] then
-        char.HumanoidRootPart.CFrame = CFrame.new(-2779.02026, 24.0699158, 829.802124) 
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2779.02026, 24.0699158, 829.802124) 
     elseif v == tplist[8] then
-        char.HumanoidRootPart.CFrame = CFrame.new(-2593.00562, 17.7490444, -165.444214)
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2593.00562, 17.7490444, -165.444214)
     elseif v == tplist[9] then
-        char.HumanoidRootPart.CFrame = CFrame.new(-2380.06616, 185.000015, 2334.91284)  
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2380.06616, 185.000015, 2334.91284)  
     elseif v == tplist[10] then
-        char.HumanoidRootPart.CFrame = CFrame.new(-2054.56274, 17, 1332.3407)  
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2054.56274, 17, 1332.3407)  
     elseif v == tplist[11] then
-        char.HumanoidRootPart.CFrame = CFrame.new(807.376892, 13, 2451.57617)  
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(807.376892, 13, 2451.57617)  
     elseif v == tplist[12] then
-        char.HumanoidRootPart.CFrame = CFrame.new(15.3122225, 13.9999962, 573.928467)  
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(15.3122225, 13.9999962, 573.928467)  
     elseif v == tplist[13] then
-        char.HumanoidRootPart.CFrame = CFrame.new(-1066.9812, 16.9999943, -920.639221)  
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1066.9812, 16.9999943, -920.639221)  
     elseif v == tplist[14] then
-        char.HumanoidRootPart.CFrame = CFrame.new(-1718.01709, 444.641815, -1234.63208)  
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1718.01709, 444.641815, -1234.63208)  
     end
 end)
-local tplist = {}
+
+local tplist = {
+    "Black Leg",
+}
 for _,v in pairs(workspace:GetChildren()) do
-    if not table.find(tplist,v.Name) and v:FindFirstChildOfClass("Humanoid") and v:FindFirstChild("Click") or v:FindFirstChild("Buy") and v.Name ~= "SpawnManager" then
+    if not table.find(tplist,v.Name) and v:FindFirstChild("Click") or v:FindFirstChild("Buy") then
+        if v:FindFirstChild("HumanoidRootPart") then
+            table.insert(tplist,v.Name)
+        end
+    elseif v:FindFirstChild("Meshes/Torus") and v:FindFirstChild("Handle") then
+        v.Name = "Soru"
+        table.insert(tplist,v.Name)
+    elseif v.Name == "Handle" and v:FindFirstChild("ClickDetector") then
+        v.Name = "Black Leg"
         table.insert(tplist,v.Name)
     end
 end
 
-local npcdropdown = lp:dropdown('NPCs',tplist,function(v)
-    local v = workspace[v].HumanoidRootPart
-    local part = Instance.new("Part",workspace)
-    part.CFrame = v.CFrame * CFrame.new(0,-3,0)
-    part.Anchored = true
-    part.Transparency = 1
-    part.Size = Vector3.new(25,0.1,25)
-    char.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,3,-3)
+localplr:dropdown("Tp To Npc",tplist,function(v)
+        if v ~= "Black Leg" then
+            local v = workspace[v]:FindFirstChildOfClass("Part")
+            local part = Instance.new("Part",workspace)
+            
+            plr.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.Angles(math.rad(-45),0,0) + Vector3.new(0,15,0) 
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position,v.Position)
+            
+            part.CFrame = v.CFrame * CFrame.new(0,-1,0)
+            part.Size = Vector3.new(10,0.5,10)
+            part.Transparency = 1
+        else
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2795.3916, 51.6315727, -232.459839) + Vector3.new(0,15,0) 
+        end
 end)
 
-local lp = library:window("Local Player")
-lp:toggle("Loop Walk Speed",false,function(a)WSToggle=a;end)
-lp:slider("Walk speed",16,200,16,function(a)Walkspeed=a;end)
-lp:toggle("Loop Jump Power",false,function(a)JumpPower=a;end)
-lp:slider("Jump Power",50,500,16,function(a)JumpPower=a;end)
+--Other
+other:button("ServerHop",function()
+    --Skidded from inf yield lol
+    local x = {}
+	for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
+		if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game.JobId then
+			x[#x + 1] = v.id
+		end
+	end
+	if #x > 0 then
+		game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, x[math.random(1, #x)])
+	else
+		return notify("Serverhop","Couldn't find a server.")
+	end
+end)
 
---Functions
-
-function equip()
-    if plr.Backpack:FindFirstChild(Weapon) and char:FindFirstChild(Weapon) == nil then
-        local tool = plr.Backpack:FindFirstChild(Weapon)
-        char.Humanoid:EquipTool(tool)
-    end
-end
-
-function activate()
-    pcall(function()
-        if char:FindFirstChild(Weapon) then
-            local tool = char:FindFirstChild(Weapon)
-            tool:Activate()
-        end
-    end)
-end
-
+--Autofarm
 function enemy()
-    for i,v in pairs(workspace:GetChildren(Target)) do
-        if v.Name == Target and v:IsA("Model") then
+    local a1 = workspace:GetChildren()
+    local a2 = workspace["First Island Enemy"]:GetChildren()
+    for i = 1, #a1 do local v = a1[i]
+        if v.Name == Enemie and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+            return v
+        end
+    end
+    for i = 1, #a2 do local v = a2[i]
+        if v.Name == Enemie and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
             return v
         end
     end
 end
 
---Noclip
+function usemoves()
+    for i,v in pairs(Skills) do
+        if v == true then
+            vim:SendKeyEvent(true,Enum.KeyCode[i],false,game)
+            vim:SendKeyEvent(false,Enum.KeyCode[i],false,game)
+        end
+    end
+end
+
+
 run.RenderStepped:Connect(function()
     if Enabled then
-        char.Humanoid:ChangeState(11)
+        if plr.Character:FindFirstChild("Humanoid") then
+            plr.Character:FindFirstChild("Humanoid"):ChangeState(11)
+        end
+    end 
+end)
+
+workspace.ChildAdded:Connect(function(child)
+    if DFToggle then  
+        if child:IsA("Tool") then
+            tpDF(child)
+        end 
     end
 end)
 
---Script Functions
+workspace.DF.ChildAdded:Connect(function(child)
+    if DFToggle then  
+        if child:IsA("Tool") then
+            tpDF(child)
+        end 
+    end
+end)
+
 while true do
     local v = enemy()
-    if Enabled and typeof(v) == "Instance" then
+    if DFToggle then
+        for _,df in pairs(workspace.DF:GetChildren()) do
+            if df:IsA("Tool") then
+                tpDF(df)
+            end
+        end
+        for _,df in pairs(workspace:GetChildren()) do
+            if df:IsA("Tool") then
+                tpDF(df)
+            end 
+        end
+        wait()
+    elseif Enabled and typeof(v) == "Instance" then
         repeat
-            equip()
-            activate()
             pcall(function()
-                char.HumanoidRootPart.CFrame = CFrame.new(v.HumanoidRootPart.Position) * CFrame.Angles(math.rad(Distance < 0 and 90 or -90),0,0) + Vector3.new(0,Distance,0)  
+                plr.Character.HumanoidRootPart.CFrame = CFrame.new(v.HumanoidRootPart.Position) * CFrame.Angles(math.rad(Distance < 0 or 90 and -90),0,0) + Vector3.new(0,Distance,0)
             end)
             wait()
-        until not Enabled or not v.Parent or not v:FindFirstChild("HumanoidRootPart") or not v:FindFirstChild("Humanoid") or v.Humanoid.Health <= 0
-    elseif WSToggle then
-        repeat  char.Humanoid.WalkSpeed = Walkspeed Wait() until not WSToggle
-    elseif JPToggle then
-        repeat char.Humanoid.JumpPower = Jumppower Wait() until not JPToggle
+            usemoves()
+            pcall(function()
+                spawn(function()
+                    if Enabled and Weapon ~= "All" then
+                            local v = plr.Backpack:FindFirstChild(Weapon) or plr.Character:FindFirstChild(Weapon)
+                            if v and plr.Character:FindFirstChild("Humanoid") then
+                                v.Parent = plr.Character
+                                if table.find(toolremotes,v.Name) and v.Parent == plr.Character then
+                                    game:GetService("ReplicatedStorage").RemoteEvent[v.Name].Event:FireServer("Slash")
+                                    game:GetService("ReplicatedStorage").RemoteEvent[v.Name].Event:FireServer("Equip")
+                                elseif not table.find(toolremotes,v.Name) and v.Parent == plr.Character then
+                                    game:GetService("ReplicatedStorage").RemoteEvent.Fighting_Style.Event:FireServer("Attack")
+                                    game:GetService("ReplicatedStorage").RemoteEvent.Weapons.Event:FireServer("Slash")
+                                    game:GetService("ReplicatedStorage").RemoteEvent.Combat.Punch:FireServer()
+                                end
+                            end
+                    elseif Enabled and Weapon == "All" then
+                            repeat
+                                for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                                    if not string.find(v.Name, "Fruity") then	
+                                        v.Parent = game.Players.LocalPlayer.Character
+                                    end
+                                end	
+                                
+                                if Toolsequipped == false then
+                                    for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                                        if v:IsA("Tool") and table.find(toolremotes,v.Name) then
+                                                game:GetService("ReplicatedStorage").RemoteEvent[v.Name].Event:FireServer("Equip")
+                                        elseif v:IsA("Tool") and not table.find(toolremotes,v.Name) then
+                                            if v.Name ~= "Combat" then
+                                                game:GetService("ReplicatedStorage").RemoteEvent.Fighting_Style.Event:FireServer("Attack")
+                                                game:GetService("ReplicatedStorage").RemoteEvent.Weapons.Event:FireServer("Slash")
+                                            end
+                                        end
+                                    end
+                                Toolsequipped = true
+                                end
+                                wait()
+                                if Toolsequipped == true then
+                                    game:GetService("ReplicatedStorage").RemoteEvent.Combat.Punch:FireServer()
+                                    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                                        if v:IsA("Tool") and table.find(toolremotes,v.Name) then
+                                            game:GetService("ReplicatedStorage").RemoteEvent[v.Name].Event:FireServer("Slash")
+                                        elseif v:IsA("Tool") and not table.find(toolremotes,v.Name) then
+                                            if v.Name ~= "Combat" then
+                                                game:GetService("ReplicatedStorage").RemoteEvent.Fighting_Style.Event:FireServer("Attack")
+                                                game:GetService("ReplicatedStorage").RemoteEvent.Weapons.Event:FireServer("Slash")
+                                            end
+                                        end
+                                    end
+                                end
+                        until not Enabled or Weapon ~= "All"
+                    end
+                end)
+            end)
+        until not Enabled or Enemie ~= v.Name or v.Humanoid.Health <= 0
+    elseif not Enabled then
+        Toolsequipped = false
     end
     wait(.2)
 end
