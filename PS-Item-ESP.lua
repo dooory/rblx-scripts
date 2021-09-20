@@ -1,3 +1,27 @@
+_G.Enabled = true -- true/false
+
+_G.Settings = {
+    RefreshRate = 1; --How many seconds before it checks if there is a newly spawned item
+    WhitelistedItems = {"Stand Arrow","Gleaming Stand Arrow", "Unusual Stand Arrow", "Rokakaka"};
+    TextSize = 10; -- Determines the size of the esps font size
+    TextColor = Color3.new(255,0,0); -- Changes the color of the text
+    TextStrokeTransparency = 0; -- Adjusts how transparent the texts stroke is
+    TextStrokeColor = Color3.new(0,0,0); -- color of the texts stroke
+}
+
+if _G.Enabled == false then
+    _G.Running = false
+end
+
+if _G.Running then return end
+
+if _G.Enabled == true then
+    _G.Running = true
+end
+
+
+print("yes")
+
 function CreateESPPart(BodyPart,color, Name)
     if not BodyPart:FindFirstChild("ESPLabel") then
         local ESPPartparent = BodyPart
@@ -19,7 +43,13 @@ function CreateESPPart(BodyPart,color, Name)
         TextLabel.TextSize = _G.Settings.TextSize
         TextLabel.TextStrokeColor3 = _G.Settings.TextStrokeColor
         TextLabel.TextStrokeTransparency = _G.Settings.TextStrokeTransparency
-    else
+    elseif BodyPart:FindFirstChild("ESPLabel") then
+        local TextLabel = BodyPart:FindFirstChild("ESPLabel").TextLabel
+        
+        TextLabel.TextSize = _G.Settings.TextSize
+        TextLabel.TextStrokeColor3 = _G.Settings.TextStrokeColor
+        TextLabel.TextStrokeTransparency = _G.Settings.TextStrokeTransparency
+        TextLabel.TextColor3 = _G.Settings.TextColor
         return
     end
 end
@@ -33,20 +63,22 @@ function ClearESP()
 end
 
 while wait(_G.Settings.RefreshRate) do
+    if _G.Enabled == true then
+
+    elseif _G.Enabled == false then
+        ClearESP()
+        break
+    end
+    
     for i,v in pairs(game:GetService("Workspace").Drops.Active:GetChildren()) do
-        if _G.Enabled == true then
-            if table.find(_G.Settings.WhitelistedItems, v.Name) then
-                if v:IsA("Model") then
-                    local Part = v.PrimaryPart or v:FindFirstChildOfClass("MeshPart") or v:FindFirstChildOfClass("Part")
+        if table.find(_G.Settings.WhitelistedItems, v.Name) then
+            if v:IsA("Model") then
+                local Part = v.PrimaryPart or v:FindFirstChildOfClass("MeshPart") or v:FindFirstChildOfClass("Part")
                     
-                    CreateESPPart(Part, Color3.fromRGB(255,0,0), v.Name)
-                elseif v:IsA("MeshPart") then
-                    CreateESPPart(v, Color3.fromRGB(255,0,0), v.Name)
-                end
+                CreateESPPart(Part, _G.Settings.TextColor, v.Name)
+            elseif v:IsA("MeshPart") then
+                CreateESPPart(v, _G.Settings.TextColor, v.Name)
             end
-        elseif _G.Enabled == false then
-            ClearESP()
-            break
         end
     end
 end
