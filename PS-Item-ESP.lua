@@ -19,9 +19,6 @@ if _G.Enabled == true then
     _G.Running = true
 end
 
-
-print("yes")
-
 function CreateESPPart(BodyPart,color, Name)
     if not BodyPart:FindFirstChild("ESPLabel") then
         local ESPPartparent = BodyPart
