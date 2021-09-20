@@ -1,14 +1,3 @@
-_G.Enabled = true -- true/false
-
-_G.Settings = {
-    RefreshRate = 1; --How many seconds before it checks if there is a newly spawned item
-    WhitelistedItems = {"Stand Arrow","Gleaming Stand Arrow", "Unusual Stand Arrow", "Rokakaka"};
-    TextSize = 10; -- Determines the size of the esps font size
-    TextColor = Color3.new(255,0,0); -- Changes the color of the text
-    TextStrokeTransparency = 0; -- Adjusts how transparent the texts stroke is
-    TextStrokeColor = Color3.new(0,0,0); -- color of the texts stroke
-}
-
 if _G.Enabled == false then
     _G.Running = false
 end
