@@ -12,7 +12,7 @@ function CreateESPPart(BodyPart, color, Name)
     if not BodyPart:FindFirstChild("ESPLabel") then
         local ESPPartparent = BodyPart
         local Box = Instance.new("BillboardGui")
-        Box.Size = UDim2.new(_G.Settings.TextSize,0,_G.Settings.TextSize,0)
+        Box.Size = UDim2.new(10,0,10,0)
         Box.Name = "ESPLabel"
         Box.Adornee = ESPPartparent
         Box.AlwaysOnTop = true
