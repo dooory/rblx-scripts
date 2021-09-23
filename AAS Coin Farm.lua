@@ -10,9 +10,11 @@ while wait(1) do
         local Base = coin:FindFirstChild("Base")
         
         if Base then
-            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Base, 0)
-            wait()
-            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Base, 1)
+            if game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Base, 0)
+                wait()
+                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Base, 1)
+            end
         end
     end
 end
