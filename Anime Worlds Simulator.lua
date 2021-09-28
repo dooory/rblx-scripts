@@ -16,6 +16,7 @@ local humanoid = character:WaitForChild("Humanoid")
 game:GetService("ReplicatedStorage").Remotes.Events.ChangeSetting:FireServer("AutoPlant", true)
 game:GetService("ReplicatedStorage").Remotes.Events.ChangeSetting:FireServer("AutoFeed", true)
 game:GetService("ReplicatedStorage").Remotes.Events.ChangeSetting:FireServer("AutoMerge", true)
+game:GetService("ReplicatedStorage").Remotes.Events.ChangeSetting:FireServer("AutoEquip", true)
 
 getgenv().Target = "Hoshi"
 getgenv().Mode = "Mob"
