@@ -55,16 +55,19 @@ local section1 = autoFarmPage:addSection("Auto-Farm")
 local section2 = lpPage:addSection("Physics")
 local section3 = miscPage:addSection("Misc")
 
-section1:addToggle("Auto-Farm Enabled", false, function(value)
+local edit2 = section1:addToggle("Auto-Farm Enabled", false, function(value)
     getgenv().Enabled = value
 end)
 
 section1:addDropdown("Bush Size", {"BigBoi", "Smol"}, function(value)
     getgenv().BushSize = value
     
+    section1:updateToggle(edit2, "Auto-Farm Enabled", false)
     getgenv().Enabled = false
     task.wait(0.1)
+    section1:updateToggle(edit2, "Auto-Farm Enabled", true)
     getgenv().Enabled = true
+    
 end)
 
 section1:addDropdown("Mode", {"Fruit","Mob"}, function(value)
@@ -181,19 +184,20 @@ end
 
 while true do
     if getgenv().Enabled then
-        if getgenv().Mode == "Mob" and mob then
+        if getgenv().Mode == "Mob" then
             local mob = mob()
-
-            local healthbar = mob:FindFirstChild("HumanoidRootPart"):FindFirstChild("EnemyHealthOverhead"):FindFirstChild("Back").Progress.Text:split(" / ")
-
-            repeat
-                pcall(function()
-                    hrp.CFrame = CFrame.new(mob.HumanoidRootPart.Position)
-                end)
-
-                task.wait(0.2)
-            until mob:FindFirstChild("HumanoidRootPart") == nil or healthbar[1] == healthbar[2] or not getgenv().Enabled or getgenv().Mode ~= "Mob"  or getgenv().Target ~= (mob.Name:split("_"))[2]
-
+            
+            if mob then
+                local healthbar = mob:FindFirstChild("HumanoidRootPart"):FindFirstChild("EnemyHealthOverhead"):FindFirstChild("Back").Progress.Text:split(" / ")
+    
+                repeat
+                    pcall(function()
+                        hrp.CFrame = CFrame.new(mob.HumanoidRootPart.Position)
+                    end)
+    
+                    task.wait(0.2)
+                until mob:FindFirstChild("HumanoidRootPart") == nil or healthbar[1] == healthbar[2] or not getgenv().Enabled or getgenv().Mode ~= "Mob"  or getgenv().Target ~= (mob.Name:split("_"))[2]
+            end
         elseif getgenv().Mode == "Fruit" and fruitBush then
             local fruitBush= fruitBush()
 
