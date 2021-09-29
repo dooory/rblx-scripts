@@ -24,6 +24,8 @@ getgenv().Mode = "Mob"
 getgenv().Enabled = false
 getgenv().AutoHatch = false
 getgenv().BushSize = false
+getgenv().Orb = "Z1Orb"
+getgenv().AutoPlace = false
 
 local mobTable = {}
 local zoneTable = {}
@@ -100,12 +102,44 @@ end)
 
 local function HatchAll()
     for i = 1, 10 do
-        game:GetService("ReplicatedStorage").Remotes.Events.HatchOrb:FireServer(i)
+        game:GetService("ReplicatedStorage").Remotes.Events.PlaceOrb:FireServer(i)    
     end
 end
 
+section3:addButton("Hatch All", function()
+    for i = 1, 10 do
+        game:GetService("ReplicatedStorage").Remotes.Events.HatchOrb:FireServer(i)
+    end
+end)
+
 section3:addToggle("Auto-Hatch", false, function(value)
     getgenv().AutoHatch = value
+end)
+
+local function placeAll()
+    for i = 1, 10 do
+        game:GetService("ReplicatedStorage").Remotes.Events.PlaceOrb:FireServer(i, getgenv().Orb)
+    end
+end
+
+section3:addButton("Place Orbs", function()
+    for i = 1, 10 do
+        game:GetService("ReplicatedStorage").Remotes.Events.PlaceOrb:FireServer(i, getgenv().Orb)
+    end
+end)
+
+section3:addToggle("Auto Place", false, function(value)
+    getgenv().AutoPlace = value
+end)
+
+local orbs = {}
+
+for i,v in pairs(game:GetService("ReplicatedStorage").Assets.Orbs:GetChildren()) do
+    table.insert(orbs, v.Name)
+end
+
+section3:addDropdown("Orb to place", orbs, function(value)
+    getgenv().Orb = value
 end)
 
 local function punch()
@@ -120,6 +154,10 @@ task.spawn(function()
         
         if getgenv().AutoHatch then
             HatchAll()
+        end
+        
+        if getgenv().AutoPlace then
+            placeAll()
         end
     end
 end)
@@ -206,18 +244,21 @@ while true do
             end
         elseif getgenv().Mode == "Fruit" and fruitBush then
             local fruitBush= fruitBush()
+            
+            if fruitBush then
+                repeat
+                    pcall(function()
+                        if getgenv().BushSize == "Smol" then
+                            hrp.CFrame = CFrame.new(fruitBush.Position) * CFrame.new(0, 2.5, 0)
+                        elseif getgenv().BushSize == "BigBoi" then
+                            hrp.CFrame = CFrame.new(fruitBush.Position) * CFrame.new(0, 5, 0)
+                        end
+                    end)
+    
+                    task.wait(0.2)
+                until (not fruitBush:FindFirstChildOfClass("Model")) or not getgenv().Enabled or getgenv().Mode ~= "Fruit"
 
-            repeat
-                pcall(function()
-                    if getgenv().BushSize == "Smol" then
-                        hrp.CFrame = CFrame.new(fruitBush.Position) * CFrame.new(0, 2.5, 0)
-                    elseif getgenv().BushSize == "BigBoi" then
-                        hrp.CFrame = CFrame.new(fruitBush.Position) * CFrame.new(0, 5, 0)
-                    end
-                end)
-
-                task.wait(0.2)
-            until (not fruitBush:FindFirstChildOfClass("Model")) or not getgenv().Enabled or getgenv().Mode ~= "Fruit"
+            end
         end
     end
 
