@@ -188,15 +188,21 @@ while true do
             local mob = mob()
             
             if mob then
-                local healthbar = mob:FindFirstChild("HumanoidRootPart"):FindFirstChild("EnemyHealthOverhead"):FindFirstChild("Back").Progress.Text:split(" / ")
+                local healthbar = mob:FindFirstChild("HumanoidRootPart"):FindFirstChild("EnemyHealthOverhead") or mob:FindFirstChild("HumanoidRootPart"):FindFirstChild("BossHealthOverhead")
+
+                if healthbar then
+                    local healthbar = healthbar.Back.Progress.Text:split(" / ")
+                    
+                    repeat
+                        pcall(function()
+                            hrp.CFrame = CFrame.new(mob.HumanoidRootPart.Position)
+                        end)
+        
+                        task.wait(0.2)
+                    until mob:FindFirstChild("HumanoidRootPart") == nil or healthbar[1] == healthbar[2] or not getgenv().Enabled or getgenv().Mode ~= "Mob"  or getgenv().Target ~= (mob.Name:split("_"))[2]
+                end
     
-                repeat
-                    pcall(function()
-                        hrp.CFrame = CFrame.new(mob.HumanoidRootPart.Position)
-                    end)
-    
-                    task.wait(0.2)
-                until mob:FindFirstChild("HumanoidRootPart") == nil or healthbar[1] == healthbar[2] or not getgenv().Enabled or getgenv().Mode ~= "Mob"  or getgenv().Target ~= (mob.Name:split("_"))[2]
+                
             end
         elseif getgenv().Mode == "Fruit" and fruitBush then
             local fruitBush= fruitBush()
