@@ -90,6 +90,15 @@ section2:addDropdown("Tp to Zone", zoneTable, function(value)
     getgenv().Zone = value
     
     hrp.CFrame = CFrame.new(workspace.Zones[value].TeleportPosition.Position)
+    
+    game:GetService("ReplicatedStorage").Remotes.Events.TeleportedToZone:FireServer(value)
+    
+    task.delay(1, function()
+        section1:updateDropdown(edit, "Target", refreshEnemies(), function()
+            getgenv().Target = value
+        end)
+    end)
+
 end)
 
 section2:addSlider("WalkSpeed", 16, 16, 100, function(value)
@@ -100,12 +109,6 @@ section2:addSlider("JumpPower", 50, 50, 250, function(value)
     humanoid.JumpPower = value
 end)
 
-local function HatchAll()
-    for i = 1, 10 do
-        game:GetService("ReplicatedStorage").Remotes.Events.PlaceOrb:FireServer(i)    
-    end
-end
-
 section3:addButton("Hatch All", function()
     for i = 1, 10 do
         game:GetService("ReplicatedStorage").Remotes.Events.HatchOrb:FireServer(i)
@@ -115,12 +118,6 @@ end)
 section3:addToggle("Auto-Hatch", false, function(value)
     getgenv().AutoHatch = value
 end)
-
-local function placeAll()
-    for i = 1, 10 do
-        game:GetService("ReplicatedStorage").Remotes.Events.PlaceOrb:FireServer(i, getgenv().Orb)
-    end
-end
 
 section3:addButton("Place Orbs", function()
     for i = 1, 10 do
@@ -153,11 +150,15 @@ task.spawn(function()
         end
         
         if getgenv().AutoHatch then
-            HatchAll()
+            for i = 1, 10 do
+                game:GetService("ReplicatedStorage").Remotes.Events.PlaceOrb:FireServer(i)    
+            end
         end
         
         if getgenv().AutoPlace then
-            placeAll()
+            for i = 1, 10 do
+                game:GetService("ReplicatedStorage").Remotes.Events.PlaceOrb:FireServer(i, getgenv().Orb)
+            end
         end
     end
 end)
@@ -229,13 +230,14 @@ while true do
                 local healthbar = mob:FindFirstChild("HumanoidRootPart"):FindFirstChild("EnemyHealthOverhead") or mob:FindFirstChild("HumanoidRootPart"):FindFirstChild("BossHealthOverhead")
 
                 if healthbar then
+                    local offset = CFrame.new(0, -5, 0)
+                    
                     local healthbar = healthbar.Back.Progress.Text:split(" / ")
                     
                     repeat
-                        pcall(function()
-                            hrp.CFrame = CFrame.new(mob.HumanoidRootPart.Position)
-                        end)
-        
+                        
+                            hrp.CFrame = CFrame.new(mob.HumanoidRootPart.Position) * offset
+                        
                         task.wait(0.2)
                     until mob:FindFirstChild("HumanoidRootPart") == nil or healthbar[1] == healthbar[2] or not getgenv().Enabled or getgenv().Mode ~= "Mob"  or getgenv().Target ~= (mob.Name:split("_"))[2]
                 end
