@@ -1,7 +1,7 @@
 _G.Enabled = false
 _G.World = "One Blox Docks"
 _G.Target = "Pirate Thug"
-_G.Mode = "Mob"
+_G.Mode = "Target"
 _G.Distance = 6
 
 local Run = game:GetService("RunService")
@@ -34,7 +34,7 @@ section:addSlider("Distance", _G.Distance, 0, 10, function(value)
     _G.Distance = value
 end)
 
-section:addDropdown("Mode", {"Target", "Kill All"}, function(value)
+section:addDropdown("Mode", {"Target", "Kill All", "Kill All (Closest)"}, function(value)
     _G.Mode = value
 end)
 
@@ -105,7 +105,7 @@ function attack(Entity)
     local tool = character:FindFirstChildOfClass("Tool") or localPlayer.Backpack:FindFirstChildOfClass("Tool")
     
     if tool then
-        Humanoid:EquipTool(tool)
+        tool.Parent = character
         
         for i = 1, 10 do
             local ohTable2 = {
@@ -132,7 +132,6 @@ function getClosestEntity()
             if _G.Mode == "Target" then
                 if InfoBar then
                     if InfoBar.NameLabel.Text == _G.Target then
-                        
                         if not (closestEntity) then
                             closestEntity = v
                         elseif closestEntity then
@@ -142,7 +141,7 @@ function getClosestEntity()
                         end
                     end
                 end
-            elseif _G.Mode == "Kill All" then
+            elseif _G.Mode == "Kill All (Closest)" then
                 if not (closestEntity) then
                     closestEntity = v
                 elseif closestEntity then
@@ -150,7 +149,12 @@ function getClosestEntity()
                         closestEntity = v
                     end
                 end
+            elseif _G.Mode == "Kill All" then
+                closestEntity = v
+                
+                return closestEntity
             end
+            
         end
     end
     
