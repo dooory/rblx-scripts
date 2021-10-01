@@ -244,7 +244,7 @@ while true do
     
                 
             end
-        elseif getgenv().Mode == "Fruit" and fruitBush then
+        elseif getgenv().Mode == "Fruit" then
             local fruitBush= fruitBush()
             
             if fruitBush then
