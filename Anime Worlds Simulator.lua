@@ -151,7 +151,7 @@ task.spawn(function()
         
         if getgenv().AutoHatch then
             for i = 1, 10 do
-                game:GetService("ReplicatedStorage").Remotes.Events.PlaceOrb:FireServer(i)    
+                game:GetService("ReplicatedStorage").Remotes.Events.HatchOrb:FireServer(i)    
             end
         end
         
