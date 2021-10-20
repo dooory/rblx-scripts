@@ -26,6 +26,26 @@ function library:serverhop()
 	end
 end
 
-getgenv().funclib = library
+function library:rspy()
+    local owner = "Upbolt"
+    local branch = "revision"
+    
+    local function webImport(file)
+        return loadstring(game:HttpGetAsync(("https://raw.githubusercontent.com/%s/Hydroxide/%s/%s.lua"):format(owner, branch, file)), file .. '.lua')()
+    end
+    
+    webImport("init")
+    webImport("ui/main")
+end
+
+function library:dex()
+    loadstring(game:HttpGetAsync("https://pastebin.com/raw/fPP8bZ8Z"))()
+end
+
+function library:decompiler()
+    loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/dooory/rblx-scripts/main/Tools/Advanced%20Decompiler.lua"))()
+end
+
+getgenv().functions = library
 
 print("Loaded Function Library in " .. tostring(tick() - startTime))
