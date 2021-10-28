@@ -46,6 +46,45 @@ function library:decompiler()
     loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/dooory/rblx-scripts/main/Tools/Advanced%20Decompiler.lua"))()
 end
 
+function library:CheckIfAlive(Char, Debug)
+    local oldError = getrenv().error
+    
+    if (not Debug) then
+        getrenv().error = function() return end
+    end
+    
+    if Char ~= nil then
+        local cHumanoid = Char:FindFirstChildOfClass("Humanoid")
+        local cHead = Char:FindFirstChild("Head")
+        
+        if cHumanoid then
+            if cHumanoid.Health > 0 then
+                if cHead then
+                    return true
+                else
+                    error(Char.Name.."'s Head == nil")
+                    
+                    return false
+                end
+            else
+                error(Char.Name.."'s Humanoid Health == 0")
+                
+                return false
+            end
+        else
+            error(Char.Name.."'s Humanoid == nil")
+            
+            return false
+        end
+    else
+        error("Character == nil")
+        
+        return false
+    end
+    
+    getrenv.error = oldError
+end
+
 getgenv().functions = library
 
 print("Loaded Function Library in " .. tostring(tick() - startTime))
