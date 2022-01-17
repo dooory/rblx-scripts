@@ -1,3 +1,7 @@
+if getgenv().functionsLibraryLoaded == true then
+	return
+end
+
 local startTime = tick()
 
 local library = {}
@@ -46,7 +50,7 @@ function library:decompiler()
     loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/dooory/rblx-scripts/main/Tools/Advanced%20Decompiler.lua"))()
 end
 
-function library:CheckIfAlive(Char, Debug)
+function library:checkIfAlive(Char, Debug)
     local oldError = getrenv().error
     
     if (not Debug) then
@@ -86,5 +90,6 @@ function library:CheckIfAlive(Char, Debug)
 end
 
 getgenv().functions = library
+getgenv().functionsLibraryLoaded = true
 
 print("Loaded Function Library in " .. tostring(tick() - startTime))
