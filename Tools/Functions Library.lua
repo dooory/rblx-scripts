@@ -7,7 +7,7 @@ local startTime = tick()
 local library = {}
 
 --ty wally for this https://github.com/wally-rblx/uwuware-ui/blob/main/main.lua line 20
-function library:round(num, bracket)
+function library:Round(num, bracket)
 	bracket = bracket or 1
 	local a = math.floor(num/bracket + (math.sign(num) * 0.5)) * bracket
 	if a < 0 then
@@ -17,7 +17,7 @@ function library:round(num, bracket)
 end
 
 --ty inf yield https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source
-function library:serverhop()
+function library:Serverhop()
     	local x = {}
     
 	for _, v in ipairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")).data) do
@@ -30,7 +30,7 @@ function library:serverhop()
 	end
 end
 
-function library:rspy()
+function library:Rspy()
     local owner = "Upbolt"
     local branch = "revision"
     
@@ -42,15 +42,15 @@ function library:rspy()
     webImport("ui/main")
 end
 
-function library:dex()
+function library:Dex()
     loadstring(game:HttpGetAsync("https://pastebin.com/raw/fPP8bZ8Z"))()
 end
 
-function library:decompiler()
+function library:Decompiler()
     loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/dooory/rblx-scripts/main/Tools/Advanced%20Decompiler.lua"))()
 end
 
-function library:checkIfAlive(Char, Debug)
+function library:CheckIfAlive(Char, Debug)
     local oldError = getrenv().error
     
     if (not Debug) then
